@@ -1,9 +1,16 @@
 from __future__ import annotations
 
+import sys
 import math
 from typing import Any, TypeVar
 
-Self = TypeVar("Self", bound="LabUnc")
+
+if sys.version_info < (3, 11):
+    from typing_extensions import Self
+else:
+    from typing import Self
+
+
 
 class LabUnc:
     @staticmethod
