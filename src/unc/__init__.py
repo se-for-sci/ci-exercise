@@ -6,6 +6,12 @@ import math
 import sys
 from typing import Any
 
+if sys.version_info < (3, 13):
+    from typing_extensions import deprecated
+else:
+    from warnings import deprecated
+
+
 if sys.version_info < (3, 11):
     from typing_extensions import Self
 else:
@@ -49,10 +55,11 @@ class LabUnc:
         self.s = abs(uncertainty)
 
     @property
+    @deprecated("no longer needed")
     def ndigits(self) -> int:
         """Return the number of digits to round to."""
         v = math.ceil(-math.log10(self.s) + math.log10(self.rounding_rule))
-        return v if v > 0 else 0
+        return max(v, 0)
 
     @property
     def max(self) -> float:
@@ -86,21 +93,21 @@ class LabUnc:
 
     def __mul__(self: Self, other: LabUnc) -> Self:
         """Multiply two instances of the class."""
-        c = self.n * other.n
-        δc = c * self.combine(self.s / self.n, other.s / other.n)
-        return type(self)(c, δc)
+        C = self.n * other.n
+        δC = C * self.combine(self.s / self.n, other.s / other.n)
+        return type(self)(C, δC)
 
     def __truediv__(self: Self, other: LabUnc) -> Self:
         """Divide two instances of the class."""
-        c = self.n / other.n
-        δc = c * self.combine(self.s / self.n, other.s / other.n)
-        return self.__class__(c, δc)
+        C = self.n / other.n
+        δC = C * self.combine(self.s / self.n, other.s / other.n)
+        return self.__class__(C, δC)
 
     def __pow__(self: Self, power: float) -> Self:
         """Raise an instance of the class to a power."""
-        c = self.n**power
-        δc = c * (power * self.s / self.n)
-        return self.__class__(c, δc)
+        C = self.n**power
+        δC = C * (power * self.s / self.n)
+        return self.__class__(C, δC)
 
 
 class StdUnc(LabUnc):

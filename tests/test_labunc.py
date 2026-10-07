@@ -1,4 +1,5 @@
 """Defines tests for the LabUnc class."""
+import pytest
 
 from unc import LabUnc
 
@@ -31,3 +32,9 @@ def test_pow():
     """Test raising a LabUnc instance to a."""
     assert LabUnc(10, 1) ** 2 == LabUnc(100, 20)
     assert LabUnc(20, 0.1) ** 3 == LabUnc(8000, 120)
+
+
+def test_ndigits_deprecated():
+    """Tests if ndigits throws a warning."""
+    with pytest.warns(DeprecationWarning):
+        assert LabUnc(10, 0.1).ndigits == 1
