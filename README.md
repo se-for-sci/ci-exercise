@@ -5,7 +5,7 @@ We recommend that you use the name `ci-exercice-{NETID}`.
 
 In this repo is a basic project, with some code in `src/unc/__init__.py` and
 some tests in `tests/`. The main code requires `typing_extensions` if running
-on Python < 3.11, while the tests require `pytest` and `uncertainties`. The minimum
+on Python < 3.13, while the tests require `pytest` and `uncertainties`. The minimum
 supported Python is 3.11.
 
 Add the following files:
@@ -25,12 +25,16 @@ Add the following files:
     * `extensions`: This should have `myst_parser`, `sphinx.ext.autodoc`, and `sphinx-markdown-builder`.
     * `source_suffix`: This should have both `".rst"` and `".md"`
     * `html_theme`: This should be set to `"furo"`
+
+> [!tip]
+> 
+> `sphinx-markdown-builder` is used to generate a markdown version of the API page, which is appended to the summary of the `online_doc.yml` workflow, which can be viewed on GitHub. After setting up your `pyproject.toml` and `docs/conf.py`, this workflow should run successfully.
 * `noxfile.py`: Add at least the following sessions. Optionally, you can add a formatting session or anything else useful, but at least include:
     * `tests`: `nox -s tests` should run your tests. Use the `tests` group defined above, do not list dependencies explicitly here.
     * `docs`: `nox -s docs` should build your documentation. You can have it also open a web browser if you like.
 * `.github/workflows/ci.yml`: Add two jobs.
     * Format: this should run pre-commit. Manually implement, or use the pre-commit action, or nox. Doesn't matter how you do it, but it should show the diff on failure.
-    * Tests: run your tests. Either through nox or by hand, but again, use the `tests` group, don't list `pytest`, etc. Use `ubuntu-latests` and run both minimum and maximum supported Pythons (3.10 and 3.13), either with a matrix, or with nox, or both. Feel free to uv to install, either directly or through nox.
+    * Tests: run your tests. Either through nox or by hand, but again, use the `tests` group, don't list `pytest`, etc. Use `ubuntu-latests` and run both minimum and maximum supported Pythons (3.11 and 3.13), either with a matrix, or with nox, or both. Feel free to uv to install, either directly or through nox.
     * The workflow to generate docs has already been made for you. The workflow generates HTML which can be downloaded as an artifact and outputs the `API` page as a workflow summary (see the actions tab of your private repository). This page is automatically generated from the type hints and docstrings in `src/unc/__init__.py`, as per `docs/api.rst`.
     * For full credit, make sure that the `main` branch performs all jobs successfully. You may need to format `src/unc/__init__.py` to pass `Format`.
 * `tests/conftest.py`
